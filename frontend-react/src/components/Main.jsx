@@ -9,7 +9,7 @@ const Main = () => {
                 <h1 className='text-light'>Stock Prediction Portal</h1>
                 <p className='text-light'>
 Many websites and platforms offer tools for stock analysis and forecasting, ranging from simple charts for beginners to complex AI-powered predictions for active traders. No service can guarantee 100% accuracy, but these portals provide valuable data, insights, and research to inform investment decisions.</p>
-                <Button text="Get Started" class="btn-primary" />
+                <Button text="Login" class="btn-outline-warning" />
             </div>
         </div>
     </>
