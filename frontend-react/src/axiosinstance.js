@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL
 const axiosInstance = axios.create({
-    baseURL: baseURL,
+    baseURL: import.meta.env.VITE_BACKEND_BASE_API,  // <== FIXED
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     }
-}) 
+});
 
 axiosInstance.interceptors.request.use(
     function(config){
@@ -21,7 +20,7 @@ axiosInstance.interceptors.request.use(
     function(error){
         return Promise.reject(error);
     }
-)
+);
 
 axiosInstance.interceptors.response.use(
     function(response){
@@ -29,7 +28,7 @@ axiosInstance.interceptors.response.use(
     },
     async function(error){
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry){
+        if (error.response && error.response.status === 401 && !originalRequest._retry){
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem('refreshToken');
             try{
@@ -41,14 +40,13 @@ axiosInstance.interceptors.response.use(
                 originalRequest.headers['Authorization'] = 'Bearer ' + response.data.access;
                 return axiosInstance(originalRequest);
             }
-            catch (error){
+            catch (refreshError){
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
             }
         } 
         return Promise.reject(error);
     }
-)
-
+);
 
 export default axiosInstance;
